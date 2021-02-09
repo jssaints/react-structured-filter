@@ -7,87 +7,118 @@ require('../../src/react-structured-filter.css');
 
 var ExampleData = require('./ExampleData');
 
-var ExampleTable = React.createClass({
-  getInitialState: function() {
-    return {
-      filter: [
-            {
-              category: 'Industry',
-              operator: '==',
-              value: 'Music',
-            },
-            {
-              category: 'IPO',
-              operator: '>',
-              value: 'Dec 8, 1980 10:50 PM',
-            },
-          ],
-    }
-  },
+class ExampleTable extends React.Component {
+  constructor(...args) {
+    super(...args);
+    this.getSymbolOptions = this.getSymbolOptions.bind(this);
+    this.getLazySymbolOptions = this.getLazySymbolOptions.bind(this);
 
+  }
+  state = {
+    filter: [
+      {
+        category: 'Industry',
+        categoryText: 'Industry',
+        operator: '==',
+        value: 'Music',
+        originalValue: 'Music',
+      },
+      {
+        category: 'IPO',
+        categoryText: 'IPO',
+        operator: '>',
+        value: 'Dec 8, 1980 10:50 PM',
+        originalValue: 'Dec 8, 1980 10:50 PM',
+      },
+    ],
+    symbolOptions: [
+      "1", "2", "3"
+    ]
+  };
 
-  getJsonData: function(filterString, sortColumn, sortAscending, page, pageSize, callback) {
+  getJsonData(filterString, sortColumn, sortAscending, page, pageSize, callback) {
 
-    if (filterString==undefined) {
+    if (filterString == undefined) {
       filterString = "";
     }
-    if (sortColumn==undefined) {
+    if (sortColumn == undefined) {
       sortColumn = "";
     }
 
     // Normally you would make a Reqwest here to the server
     var results = ExampleData.filter(filterString, sortColumn, sortAscending, page, pageSize);
     callback(results);
-  },
+  }
 
 
-  updateFilter: function(filter){
+  updateFilter(filter) {
     // Set our filter to json data of the current filter tokens
-    this.setState({filter: filter});
-  },
+    this.setState({ filter: filter });
+  }
 
 
-  getSymbolOptions: function() {
-    return ExampleData.getSymbolOptions();
-  },
+  getSymbolOptions() {
+    return this.state.symbolOptions;
+  };
 
-  getSectorOptions: function() {
-    return ExampleData.getSectorOptions();
-  },
+  getLazySymbolOptions(QueryValue) {
+    const overalloptions = ExampleData.getSymbolOptions();
+    this.setState({
+      symbolOptions: [
+      {value: 1, text:"baleajs123", image: "https://www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png"},
+      {value: 2, text:"Vinoth", image: "https://cdn0.iconfinder.com/data/icons/user-pictures/100/maturewoman-3-128.png"},
+      ]
+    });
 
-  getIndustryOptions: function() {
+  }
+
+
+
+  getIndustryOptions() {
     return ExampleData.getIndustryOptions();
-  },
+  }
 
 
-  render: function(){
+  render() {
     return (
       <div>
         <StructuredFilter
           placeholder="Filter data..."
           options={[
-            {category:"Symbol", type:"textoptions", options:this.getSymbolOptions},
-            {category:"Name",type:"text"},
-            {category:"Price",type:"number"},
-            {category:"MarketCap",type:"number"},
-            {category:"IPO", type:"date"},
-            {category:"Sector", type:"textoptions", options:this.getSectorOptions},
-            {category:"Industry", type:"textoptions", options:this.getIndustryOptions}
-            ]}
+            { category: "Symbol", categoryText: "Symbol", type: "textoptions", options: this.getSymbolOptions },
+            { category: "Name", categoryText: "Name", type: "text", options: () => ['aa', 'bb'] },
+            { category: "Price", type: "number" },
+            { category: "MarketCap", type: "number" },
+            { category: "IPO", type: "date" },
+            { category: "Sector", type: "textoptions", options: this.getSectorOptions },
+            { category: "Industry", type: "textoptions", options: this.getIndustryOptions }
+          ]}
           customClasses={{
             input: "filter-tokenizer-text-input",
             results: "filter-tokenizer-list__container",
             listItem: "filter-tokenizer-list__item"
           }}
-          onChange={this.updateFilter}
+          onChange={this.updateFilter.bind(this)}
           value={this.state.filter}
+          fetchLazyOption={{
+            Symbol: this.getLazySymbolOptions
+          }}
+          operators={{
+            textoptions: [`==`, `!=`],
+            text: [`contains`, `!contains`],
+            number: [`==`, `!=`, `<`, `<=`, `>`, `>=`],
+            date: [`==`, `!=`, `<`, `<=`, `>`, `>=`],
+          }}
         />
-        <GriddleWithCallback
-          getExternalResults={this.getJsonData} filter={JSON.stringify(this.state.filter)}
+
+        {/* <GriddleWithCallback
+          getExternalResults={this.getJsonData} filter={this.state.filter}
           resultsPerPage={10}
         />
+        <ExampleData ref="ExampleData" /> */}
+
       </div>
     )
   }
-});
+}
 module.exports = ExampleTable;

@@ -13,9 +13,10 @@
     "classnames": "^2.2.3",
     "fuzzy": "^0.1.0",
     "moment": "*",
+    "object-assign": "^3.0.0",
+    "react-datepicker": "^2.14.1",
     "react-datetime": "^2.1.0",
-    "react-onclickoutside": "^4.9.0",
-    "object-assign": "^3.0.0"
+    "react-onclickoutside": "6.8.0"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",
@@ -36,16 +37,16 @@
     "express": "^4.13.4",
     "faker": "^3.1.0",
     "file-loader": "^0.8.5",
-    "griddle-callback": "^0.2.1",
-    "griddle-react": "^0.3.1",
+    "griddle-callback": "0.2.1",
+    "griddle-react": "1.13.1",
     "less": "^2.6.0",
     "less-loader": "^2.2.1",
-    "react": "^0.14.0",
-    "react-docgen": "^2.19.0",
-    "react-dom": "^0.14.0",
+    "prop-types": "^15.5.7",
+    "react": "16.8.6",
+    "react-docgen": "4.1.1",
+    "react-dom": "16.8.6",
     "react-transform-catch-errors": "^1.0.2",
     "react-transform-hmr": "^1.0.2",
-    "prop-types": "^15.5.7",
     "redbox-react": "^1.2.2",
     "rimraf": "^2.5.1",
     "style-loader": "^0.13.1",
@@ -56,9 +57,9 @@
     "webpack-hot-middleware": "^2.6.4"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0",
-    "prop-types": "^15.5.7"
+    "prop-types": "^15.5.7",
+    "react": "^0.14.0 || ^16.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0"
   },
   "scripts": {
     "example:clean": "rimraf example/dist",
@@ -69,7 +70,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "clean": "rimraf lib",
-    "prebuild": "npm run lint && npm run clean",
+    "prebuild": "npm run clean",
     "build": "NODE_ENV=production babel src --out-dir lib && cp src/react-structured-filter.css lib/react-structured-filter.css",
     "docs": "cd docs && react-docgen ../src/tokenizer/index.js | ./buildDocs.sh",
     "release:major": "npm version major && npm publish && git push --follow-tags",

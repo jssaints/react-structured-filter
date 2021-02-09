@@ -14,22 +14,22 @@ export default class Token extends Component {
     onRemove: PropTypes.func,
   }
 
-  constructor( ...args ) {
-    super( ...args );
-    this._handleClick = this._handleClick.bind( this );
+  constructor(...args) {
+    super(...args);
+    this._handleClick = this._handleClick.bind(this);
   }
 
-  _handleClick( event ) {
-    this.props.onRemove( this.props.children );
+  _handleClick(event) {
+    this.props.onRemove(this.props.children);
     event.preventDefault();
   }
 
   _makeCloseButton() {
-    if ( !this.props.onRemove ) {
+    if (!this.props.onRemove) {
       return '';
     }
     return (
-      <a className="typeahead-token-close" href="#" onClick={ this._handleClick }>&#x00d7;</a>
+      <a className="typeahead-token-close" href="#" onClick={this._handleClick}>&#x00d7;</a>
     );
   }
 
@@ -37,10 +37,15 @@ export default class Token extends Component {
     const { category, operator, value } = this.props.children;
     return (
       <div className="typeahead-token">
-        <span className="token-category">{ category }</span>
-        <span className="token-operator">{ operator }</span>
-        <span className="token-value">{ value }</span>
-        { this._makeCloseButton() }
+        <span className="token-category">{category}</span>
+        <span className="token-operator">{operator}</span>
+        <span className="token-value">{category !== 'Color' ? value : <span style={{
+          width: '10px',
+          height: '8px',
+          borderRadius: '2px',
+          background: `${(!value) ? 'transparent' : value}`,
+        }} >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>}</span>
+        { this._makeCloseButton()}
       </div>
     );
   }
