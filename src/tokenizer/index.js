@@ -150,6 +150,7 @@ export default class Tokenizer extends Component {
      * Placeholder text for the typeahead input.
      */
     placeholder: PropTypes.string,
+    clearPartialySearch: PropTypes.bool,
 
     /**
      * Event handler triggered whenever the filter is changed and a token
@@ -224,6 +225,10 @@ export default class Tokenizer extends Component {
     const update = {};
     if (nextProps.value !== this.props.value) {
       update.selected = this.getStateFromProps(nextProps);
+    }
+    if (nextProps.clearPartialySearch) {
+      update.category = '';
+      update.operator = '';
     }
     this.setState(update);
   }

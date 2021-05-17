@@ -193,7 +193,12 @@ class Typeahead extends Component {
     const SearchOption = option;
     nEntry.focus();
     nEntry.value = "";
-    SearchOption.value = this.state.entryValue
+    SearchOption.value = this.state.entryValue;
+    if(SearchOption && SearchOption.text === "Search for this text"){
+      if(SearchOption.value.trim() === ""){
+        return;
+      }
+    }
     this.props.onOptionSelected(SearchOption);
     if (this.refs.sel && this.refs.sel.setSelectionIndex) {
       this.refs.sel.setSelectionIndex(null);
@@ -219,7 +224,7 @@ class Typeahead extends Component {
 
   _onEnter(event) {
     if (!this.refs.sel.state.selection && this.refs.sel.state.selectionIndex === null) {
-      if (this.state.entryValue && this.state.entryValue !== "" && this.state.header === "Category") {
+      if (this.state.entryValue && this.state.entryValue !== "" && this.state.header === "Category" && this.state.entryValue.trim() !== "") {
         this._onOptionSelected({ text: "Search for this text", value: this.state.entryValue, image: undefined, icon: undefined, username: undefined });
         return this.props.onKeyDown(event);
       }
@@ -228,7 +233,9 @@ class Typeahead extends Component {
       }
       return this.props.onKeyDown(event);
     } else if (!this.refs.sel.state.selection && this.refs.sel.state.selectionIndex !== null && this.state.header === "Category") {
-      this._onOptionSelected({ text: "Search for this text", value: this.state.entryValue, image: undefined, icon: undefined, username: undefined });
+      if(this.state.entryValue && this.state.entryValue !== ""  && this.state.entryValue.trim() !== ""){
+        this._onOptionSelected({ text: "Search for this text", value: this.state.entryValue, image: undefined, icon: undefined, username: undefined });
+      }
       return this.props.onKeyDown(event);
     }
     this._onOptionSelected(this.refs.sel.state.selection);
